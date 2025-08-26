@@ -1,0 +1,15 @@
+# Python 
+__pycache____/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-selfcheck.json
+# Buildozer
+.buildozer/
+bin/
+build/
+dist/
+*.apk
