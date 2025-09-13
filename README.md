@@ -1,4 +1,31 @@
 URBAN DOODLE
+# CCTV Inteligente — Dashboard con AI + CRUD + TTS
+
+Sistema de videovigilancia inteligente para escritorio.  
+Usa **YOLOv8 + ByteTrack/DeepSORT** para detección y tracking de personas en tiempo real.  
+Incluye dashboard con PyQt5 y base de datos SQLite para gestionar personal, clientes, proveedores e invitados.
+
+## 🚀 Características
+- Detección AI (YOLOv8n, optimizado para edge)
+- Tracking estable (ByteTrack/DeepSORT)
+- Dashboard PyQt5 con CRUD estilo Excel
+- Logs en DB + exportación a CSV/PDF
+- Alertas por TTS en tiempo real
+- Soporte Docker + systemd
+
+## 📂 Estructura
+- `app.py` — dashboard + AI
+- `db_init.py` — inicialización de base de datos
+- `reporter.py` — reportes en PDF
+- `register_face.py` — enrolamiento de rostros
+- `cameras.json` — configuración de cámaras
+- `systemd/` — servicios para Linux
+- `Dockerfile`, `docker-compose.yml`, `Makefile`
+
+## 🛡️ Seguridad
+- DB SQLite con versionado
+- Grabaciones rotativas en `recordings/`
+- Servicios dedicados para admin y usuario cctv 
 Detector de Personas para PC con OpenCV y YOLOv3 💻
 
 Este es un script de visión por computadora en Python que utiliza la cámara web de una PC para detectar personas en tiempo real. El proyecto se basa en **OpenCV** para el procesamiento de video y el modelo **YOLOv3** (You Only Look Once) pre-entrenado en el dataset COCO para la detección de objetos.
