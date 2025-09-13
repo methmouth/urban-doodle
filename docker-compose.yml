@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  cctv:
+    build: .
+    container_name: cctv_ai
+    restart: always
+    environment:
+      - TRACKER=bytetrack
+    volumes:
+      - ./recordings:/app/recordings
+      - ./evidencias:/app/evidencias
+      - ./reports:/app/reports
+    ports:
+      - "8080:8080"
