@@ -1,3 +1,16 @@
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+*.db
+*.log
+*.bak
+*.swp
+.venv/
+venv/
+recordings/
+evidencias/
+reports/
+config_history/
+faces/
+.bytetrack/
