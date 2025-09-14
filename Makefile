@@ -1,22 +1,16 @@
-APP_NAME = cctv_ai
+.PHONY: install run docker-build docker-up clean
 
-build:
-	docker-compose build
+install:
+	./install.sh
 
-up:
+run:
+	source venv/bin/activate && python app.py
+
+docker-build:
+	docker build -t cctv_inteligente .
+
+docker-up:
 	docker-compose up -d
 
-down:
-	docker-compose down
-
-logs:
-	docker-compose logs -f
-
-restart: down up
-
 clean:
-	docker system prune -f
-	docker volume prune -f
-
-exec:
-	docker exec -it $(APP_NAME) /bin/bash
+	rm -rf venv recordings evidencias reports config_history __pycache__
