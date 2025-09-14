@@ -1,17 +1,23 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
+
 WORKDIR /app
 
+# Dependencias del sistema
 RUN apt-get update && apt-get install -y \
-    build-essential cmake git python3-dev libopenblas-dev liblapack-dev libboost-all-dev pkg-config ffmpeg \
+    ffmpeg git wget curl build-essential cmake \
+    libsm6 libxext6 libxrender-dev libgl1-mesa-glx libboost-all-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt ./
-RUN pip install --upgrade pip setuptools wheel \
-    && pip install -r requirements.txt \
-    && pip install cython \
-    && pip install git+https://github.com/iflytek/ByteTrack.git
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir -r requirements.txt
 
+# Copiar todo el proyecto
 COPY . .
 
-ENV TRACKER=bytetrack
+# Crear carpetas necesarias
+RUN mkdir -p recordings evidencias reports config_history faces
+
+EXPOSE 5000
+
 CMD ["python", "app.py"]
