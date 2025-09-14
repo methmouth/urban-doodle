@@ -1,4 +1,29 @@
 {
-  "1": "0",
-  "2": "rtsp://root:admin@[2806:2f0:3080:ee96:7c6b:beff:fef3:18e7]:1024"
+  "buildings": [
+    {
+      "name": "Edificio A",
+      "rooms": [
+        {
+          "name": "Recepción",
+          "cameras": [
+            {
+              "name": "Webcam Local",
+              "source": 0,
+              "tracker": "auto"
+            }
+          ]
+        },
+        {
+          "name": "Oficina",
+          "cameras": [
+            {
+              "name": "Camara IP",
+              "source": "rtsp://admin:12345@192.168.1.50:554/Streaming/Channels/101",
+              "tracker": "bytetrack"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
