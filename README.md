@@ -1,3 +1,233 @@
+# 📹 CCTV Inteligente — Dashboard con AI + CRUD + TTS + Reportes
+
+Sistema de videovigilancia inteligente para escritorio y servidor.  
+Usa **YOLOv8 + ByteTrack/DeepSORT** para detección y tracking de personas.  
+Incluye dashboard en **PyQt5**, **API Flask**, CRUD tipo Excel, alertas TTS y reporter automático (PDF/HTML/CSV).
+
+---
+
+## 🚀 Características principales
+
+- **Detección AI**
+  - Detector YOLOv8 (ultralytics).
+  - Trackers: **ByteTrack** (principal) o **DeepSORT** (fallback).
+  - Modo diagnóstico: corre ambos en paralelo y guarda comparativas en `reports/compare_trackers.csv`.
+  - Reconocimiento facial básico con `face_recognition`.
+
+- **Dashboard PyQt5**
+  - Vista panóptica (todas las cámaras) o individual (Zoom).
+  - Árbol lateral: **Edificio > Habitación > Cámara**.
+  - Barra de herramientas:
+    - `Agregar cámara` → añadir cámaras (locales o RTSP).
+    - `Recargar cámaras`.
+    - `Resumen 30s` → describe últimos eventos.
+    - `Exportar CSV` → exporta eventos a `reports/`.
+    - Consola en vivo abajo estilo depuración.
+
+- **Base de datos (SQLite)**
+  - `persons`: empleados, clientes, proveedores, invitados.
+  - `events`: log de detecciones (con bbox, cámara, timestamp, evidencia).
+  - Editor tipo Excel embebido en el dashboard.
+
+- **Alertas**
+  - TTS en tiempo real: *“Alerta: persona desconocida en cámara X”*.
+  - Notificaciones a Telegram (opcional).
+  - Evidencias (frames) en carpeta `evidencias/`.
+  - Subida opcional a nube con rclone/S3.
+
+- **Reportes automáticos**
+  - Genera **PDF y HTML** cada 8h con resumen + tabla.
+  - Gráficas básicas de distribución de roles.
+  - Export manual CSV desde dashboard.
+
+- **Servicios y despliegue**
+  - Ejecutable en Linux con systemd (`cctv.service`, `cctv_admin.service`).
+  - Soporte Docker + docker-compose.
+  - Instaladores `install.sh` y `install_bytetrack.sh`.
+
+---
+
+## 📂 Estructura del proyecto
+
+CCTV_Inteligente/ │── app.py              # Dashboard principal + API Flask │── db_init.py          # Inicializador de BD (persons + events) │── reporter.py         # Generador de reportes (PDF/HTML/CSV) │── register_face.py    # Enrolamiento facial (CLI) │── cameras.json        # Configuración jerárquica de cámaras │── requirements.txt    # Dependencias Python │── install.sh          # Instalador base │── install_bytetrack.sh# Instalador ByteTrack │── Dockerfile │── docker-compose.yml │── Makefile │── .dockerignore │── systemd/ │   ├── cctv.service │   └── cctv_admin.service │── people.db           # SQLite (se genera con db_init.py) │── recordings/         # Grabaciones │── evidencias/         # Evidencias de alertas │── reports/            # Reportes y comparativas │── config_history/     # Versionado de cameras.json │── faces/              # Carpeta de rostros registrados
+
+---
+
+## ⚙️ Instalación en Debian 11+
+
+```bash
+git clone <REPO_URL> CCTV_Inteligente
+cd CCTV_Inteligente
+sudo bash install.sh
+
+Instalar ByteTrack (opcional):
+
+sudo bash install_bytetrack.sh
+
+Inicializar base de datos:
+
+python3 db_init.py
+
+Ejecutar app:
+
+python3 app.py
+
+
+---
+
+🐳 Uso con Docker
+
+Construir imagen:
+
+docker build -t cctv_inteligente .
+
+Levantar servicio:
+
+docker-compose up -d
+
+
+---
+
+🛠️ Uso
+
+Al abrir app.py se lanza el dashboard.
+
+Lateral izquierdo: árbol jerárquico de cámaras.
+
+Centro: panóptico o vista de una sola cámara.
+
+Derecha: herramientas y consola.
+
+
+En la barra:
+
+Agregar cámara: añade a cameras.json y versiona en config_history/.
+
+Resumen 30s: describe últimos eventos.
+
+Exportar CSV: exporta a reports/.
+
+
+
+---
+
+🔔 Ejemplo cameras.json
+
+{
+  "buildings": [
+    {
+      "name": "Edificio A",
+      "rooms": [
+        {
+          "name": "Recepción",
+          "cameras": [
+            { "name": "Webcam Local", "source": 0, "tracker": "auto" }
+          ]
+        },
+        {
+          "name": "Oficina",
+          "cameras": [
+            { "name": "Camara IP", "source": "rtsp://admin:12345@192.168.1.50:554/Streaming/Channels/101", "tracker": "bytetrack" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
+---
+
+🛡️ Seguridad
+
+cctv.service: corre como usuario limitado cctv.
+
+cctv_admin.service: corre como root (solo administración).
+
+Rotación de grabaciones y reportes (borrar viejos cada X días).
+
+Opcional: cifrado de BD o almacenamiento con LUKS/encFS.
+
+
+
+---
+
+📊 Roadmap Futuro
+
+Reconocimiento facial avanzado con embeddings + verificación.
+
+Dashboard web (Flask + React) para acceso remoto.
+
+Integración de almacenamiento en nube (Nextcloud, S3).
+
+Reportes automáticos más ricos (PDF/HTML con estadísticas).
+
+Analítica avanzada: comportamiento, mapas de calor.
+
+
+
+---
+
+👷 Autores
+
+Equipo de Seguridad + TI
+Implementación asistida con IA (OpenAI GPT-5)
+
+
+---
+
+---
+# 📹 CCTV Inteligente — Dashboard con AI + CRUD + TTS + Reportes
+
+Sistema de videovigilancia inteligente para escritorio y servidor.  
+Usa **YOLOv8 + ByteTrack/DeepSORT** para detección y tracking de personas.  
+Incluye dashboard en **PyQt5**, **API Flask**, CRUD tipo Excel, alertas TTS y reporter automático (PDF/HTML/CSV).
+
+---
+
+## 🚀 Características principales
+
+- **Detección AI**
+  - Detector YOLOv8 (ultralytics).
+  - Trackers: **ByteTrack** (principal) o **DeepSORT** (fallback).
+  - Modo diagnóstico: corre ambos en paralelo y guarda comparativas en `reports/compare_trackers.csv`.
+  - Reconocimiento facial básico con `face_recognition`.
+
+- **Dashboard PyQt5**
+  - Vista panóptica (todas las cámaras) o individual (Zoom).
+  - Árbol lateral: **Edificio > Habitación > Cámara**.
+  - Barra de herramientas:
+    - `Agregar cámara` → añadir cámaras (locales o RTSP).
+    - `Recargar cámaras`.
+    - `Resumen 30s` → describe últimos eventos.
+    - `Exportar CSV` → exporta eventos a `reports/`.
+    - Consola en vivo abajo estilo depuración.
+
+- **Base de datos (SQLite)**
+  - `persons`: empleados, clientes, proveedores, invitados.
+  - `events`: log de detecciones (con bbox, cámara, timestamp, evidencia).
+  - Editor tipo Excel embebido en el dashboard.
+
+- **Alertas**
+  - TTS en tiempo real: *“Alerta: persona desconocida en cámara X”*.
+  - Notificaciones a Telegram (opcional).
+  - Evidencias (frames) en carpeta `evidencias/`.
+  - Subida opcional a nube con rclone/S3.
+
+- **Reportes automáticos**
+  - Genera **PDF y HTML** cada 8h con resumen + tabla.
+  - Gráficas básicas de distribución de roles.
+  - Export manual CSV desde dashboard.
+
+- **Servicios y despliegue**
+  - Ejecutable en Linux con systemd (`cctv.service`, `cctv_admin.service`).
+  - Soporte Docker + docker-compose.
+  - Instaladores `install.sh` y `install_bytetrack.sh`.
+
+---
+
+## 📂 Estructura del proyecto
+
 URBAN DOODLE
 # CCTV Inteligente — Dashboard con AI + CRUD + TTS
 
